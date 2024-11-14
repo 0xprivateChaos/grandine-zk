@@ -5,13 +5,14 @@ use execution_engine::ExecutionEngine;
 use helper_functions::{
     accessors, electra,
     error::SignatureKind,
-    misc, predicates,
+    misc, par_utils, predicates,
     signing::{RandaoEpoch, SignForAllForksWithGenesis as _, SignForSingleFork as _},
     slot_report::SlotReport,
     verifier::{NullVerifier, Triple, Verifier, VerifierOption},
 };
 use pubkey_cache::PubkeyCache;
-use rayon::iter::{IntoParallelRefIterator as _, ParallelIterator as _};
+#[cfg(not(target_os = "zkvm"))]
+use rayon::iter::ParallelIterator as _;
 use ssz::Hc;
 use std_ext::ArcExt as _;
 use types::{
@@ -71,7 +72,7 @@ pub fn state_transition<P: Preset, V: Verifier + Send>(
     };
 
     if let Some(verify_signatures) = verify_signatures {
-        let (signature_result, block_result) = rayon::join(verify_signatures, process_block);
+        let (signature_result, block_result) = par_utils::join(verify_signatures, process_block);
         signature_result.and(block_result)
     } else {
         process_block()
@@ -164,8 +165,7 @@ pub fn verify_signatures<P: Preset>(
 
         accessors::initialize_shuffled_indices(state, attestations.iter())?;
 
-        let triples = attestations
-            .par_iter()
+        let triples = helper_functions::par_iter!(attestations)
             .map(|attestation| {
                 let indexed_attestation = electra::get_indexed_attestation(state, attestation)?;
 

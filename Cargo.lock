@@ -6719,6 +6719,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db13adb97ab515a3691f56e4dbab09283d0b86cb45abd991d8634a9d6f501760"
 
 [[package]]
+name = "lib-c"
+version = "0.10.0"
+source = "git+https://github.com/0xPolygonHermez/zisk.git#c560a0e7f25c8feff405b32b81b800c1d4f6a8f1"
+
+[[package]]
 name = "libc"
 version = "0.2.175"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -14138,6 +14143,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "ziskos"
+version = "0.10.0"
+source = "git+https://github.com/0xPolygonHermez/zisk.git#c560a0e7f25c8feff405b32b81b800c1d4f6a8f1"
+dependencies = [
+ "cfg-if",
+ "getrandom 0.2.16",
+ "lazy_static",
+ "lib-c",
+ "num-bigint 0.4.6",
+ "num-traits",
+ "rand 0.8.5",
+ "static_assertions",
+ "tiny-keccak",
+]
+
+[[package]]
 name = "zkhash"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -14172,6 +14193,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "zkvm_guest_zisk"
+version = "0.1.0"
+dependencies = [
+ "byteorder",
+ "sha2",
+ "ziskos",
+]
+
+[[package]]
 name = "zkvm_host"
 version = "0.0.0"
 dependencies = [
@@ -14192,5 +14222,6 @@ dependencies = [
  "transition_functions",
  "types",
  "xz2",
+ "ziskos",
  "zkvm_guest_risc0",
 ]

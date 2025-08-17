@@ -1,0 +1,13 @@
+[package]
+name = "zkvm_guest_zisk"
+version = "0.1.0"
+edition = "2021"
+# default-run = "zkvm_guest_zisk"
+
+# [workspace]
+
+[dependencies]
+byteorder = "1.5.0"
+sha2 = "0.10.8"
+ziskos = { git = "https://github.com/0xPolygonHermez/zisk.git" }
+

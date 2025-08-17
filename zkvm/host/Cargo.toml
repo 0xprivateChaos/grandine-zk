@@ -24,6 +24,9 @@ transition_functions = { workspace = true }
 types = { workspace = true }
 xz2 = { workspace = true }
 zkvm_guest_risc0 = { workspace = true, optional = true }
+ziskos = { workspace = true, optional = true }
+
+
 
 [build-dependencies]
 sp1-helper = { workspace = true, optional = true }
@@ -38,4 +41,7 @@ risc0 = [
 sp1 = [
     "dep:sp1-helper",
     "dep:sp1-sdk"
+]
+zisk = [
+    "dep:ziskos",
 ]

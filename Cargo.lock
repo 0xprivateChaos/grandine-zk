@@ -14196,8 +14196,16 @@ dependencies = [
 name = "zkvm_guest_zisk"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "bls",
+ "bls-zkcrypto",
  "byteorder",
+ "enum-iterator",
+ "pubkey_cache",
  "sha2",
+ "ssz",
+ "transition_functions",
+ "types",
  "ziskos",
 ]
 

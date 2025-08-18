@@ -4,10 +4,17 @@ version = "0.1.0"
 edition = "2021"
 # default-run = "zkvm_guest_zisk"
 
-# [workspace]
-
 [dependencies]
 byteorder = "1.5.0"
 sha2 = "0.10.8"
 ziskos = { git = "https://github.com/0xPolygonHermez/zisk.git" }
-
+anyhow = "1.0.86"
+ssz = { path = "../../../ssz" }
+transition_functions = { path = "../../../transition_functions" }
+types = { path = "../../../types" }
+pubkey_cache = { path = "../../../pubkey_cache" }
+enum-iterator = "2"
+bls = { path = "../../../bls", features = [
+    "zkcrypto",
+], default-features = false }
+bls-zkcrypto = { path = "../../../bls/bls-zkcrypto", default-features = false }

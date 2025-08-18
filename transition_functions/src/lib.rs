@@ -28,6 +28,8 @@
 //                      Using `AtomicU64` in `altair::epoch_intermediates::statistics` breaks it
 //                      somehow (even with `Ordering::SeqCst`). Using Rayon in
 //                      `altair::epoch_intermediates::epoch_deltas` does the same.
+#![cfg_attr(target_os = "zkvm", feature(unsigned_is_multiple_of))]
+#![allow(clippy::suspicious_operation_groupings)]
 
 pub mod combined;
 

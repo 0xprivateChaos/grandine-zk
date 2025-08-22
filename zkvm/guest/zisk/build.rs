@@ -2,10 +2,12 @@ use std::env;
 use std::fs::{self, File};
 use std::io::{self, Write};
 use std::path::Path;
+use snap::raw::Decoder;
 
 // Define constants for the directory and input file name
 const OUTPUT_DIR: &str = "build/";
 const FILE_NAME: &str = "input.bin";
+
 
 fn main() -> io::Result<()> {
     // Base directory for data files, assuming zkvm/data layout
@@ -16,21 +18,27 @@ fn main() -> io::Result<()> {
         .expect("Could not find zkvm directory from guest manifest path");
     let data_dir = zkvm_dir.join("data");
 
-    // Define paths for the specific test case data
-    let block_path = data_dir.join("pectra-devnet-6/beacon_block_slot_00021568_root_0xb28a634b89c669141990ed5deceb1ea4777869a64cb8eaccb6cb9f4796c5110d.ssz");
-    let state_path = data_dir.join("pectra-devnet-6/beacon_state_slot_00021567_root_0xd51b605669c3e1ec96d83b6ab191d921f276d363621009fa6fd4a171a6bbf943.ssz");
+    // Define paths for the consensus-spec-tests empty block transition data
+    let block_path = data_dir.join("consensus-spec-tests/tests/mainnet/electra/sanity/blocks/pyspec_tests/empty_block_transition/blocks_0.ssz_snappy");
+    let state_path = data_dir.join("consensus-spec-tests/tests/mainnet/electra/sanity/blocks/pyspec_tests/empty_block_transition/pre.ssz_snappy");
 
     // Tell cargo to rerun this script if the data files change.
     println!("cargo:rerun-if-changed={}", block_path.display());
     println!("cargo:rerun-if-changed={}", state_path.display());
 
-    // 1) Load SSZ blobs from files
-    let block_ssz = fs::read(&block_path)?;
-    let state_ssz = fs::read(&state_path)?;
+    // 1) Load SSZ blobs from files and decompress snappy
+    let block_compressed = fs::read(&block_path)?;
+    let state_compressed = fs::read(&state_path)?;
+    
+    let mut decoder = Decoder::new();
+    let block_ssz = decoder.decompress_vec(&block_compressed)
+        .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, format!("Failed to decompress block: {}", e)))?;
+    let state_ssz = decoder.decompress_vec(&state_compressed)
+        .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, format!("Failed to decompress state: {}", e)))?;
     // For now, using an empty pubkey cache, as it's generated dynamically in the host.
     let cache_ssz = Vec::new();
-    // phase: None corresponds to 255u8 in the host code for tests without a specific phase.
-    let phase_bytes = vec![255u8];
+    // phase: Electra corresponds to 5u8 (Phase::Electra enum value)
+    let phase_bytes = vec![5u8];
 
     // 2) Prepare buffer: [4x u32 lengths] + [concatenated SSZ bytes]
     let mut buf = Vec::with_capacity(

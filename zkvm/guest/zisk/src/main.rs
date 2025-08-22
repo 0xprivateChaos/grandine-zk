@@ -1,6 +1,3 @@
-// This example program takes a number `n` as input and computes the SHA-256 hash `n` times sequentially.
-
-// Mark the main function as the entry point for ZisK
 #![no_main]
 ziskos::entrypoint!(main);
 
@@ -52,45 +49,61 @@ fn read_block_and_state<P: Preset>(
     let cache_ssz = read_slice(&mut cursor, input, cache_ssz_len)?;
     let phase_bytes = read_slice(&mut cursor, input, phase_bytes_len)?;
 
+    println!("Phase bytes: {:?}", phase_bytes);
     let phase = enum_iterator::all::<Phase>()
         .zip(0_u8..)
         .find(|(_, index)| phase_bytes.get(0) == Some(&index))
         .map(|(phase, _)| phase);
+    println!("Phase: {:?}", phase);
 
     let block = match phase {
         Some(phase) => SignedBeaconBlock::<P>::from_ssz_at_phase(phase, block_ssz)?,
         None => SignedBeaconBlock::<P>::from_ssz(config, block_ssz)?,
     };
+    println!("Block loaded");
 
     let state = match phase {
         Some(phase) => BeaconState::<P>::from_ssz_at_phase(phase, state_ssz)?,
         None => BeaconState::<P>::from_ssz(config, state_ssz)?,
     };
+    println!("State loaded");
 
-    let cache = if cache_ssz.is_empty() {
-        // Build a dummy cache if none is provided, as the host would normally.
-        // The real cache isn't strictly needed for the state transition function itself.
-        PubkeyCache::default()
-    } else {
-        PubkeyCache::from_ssz(config, cache_ssz)?
-    };
+    // let cache = if cache_ssz.is_empty() {
+    //     // Buildin a dummy cache
+    //     // The real cache isn't strictly needed for the state transition function itself.
+    //     PubkeyCache::default()
+    // } else {
+    //     PubkeyCache::from_ssz(config, cache_ssz)?
+    // };
+    let cache = PubkeyCache::from_ssz(config, &cache_ssz)?;
+    println!("Cache loaded");
 
     Ok((block, state, cache))
 }
 
 fn main() {
+    println!("Entering the zisk guest");
+    println!("Reading input");
     let input = read_input();
+    println!("Input read");
 
-    // use Config::pectra_devnet_4() for Pectra devnet-4;
     let config = Config::pectra_devnet_6();
+    println!("Config loaded");
 
+    println!("Reading block and state");
     let (block, mut state, cache) =
         read_block_and_state::<Mainnet>(&config, &input).expect("Failed to read input");
+    println!("Block and state read");
 
+    println!("Performing state transition");
     state_transition(&config, &cache, &mut state, &block).expect("State transition failed");
+    println!("State transition performed");
 
+    println!("Calculating root");
     let root = state.hash_tree_root();
+    println!("Root calculated");
 
+    println!("Writing output");
     // Write the resulting state root to the output, 4 bytes at a time.
     for i in 0..8 {
         let word = u32::from_le_bytes(root.0[i * 4..(i + 1) * 4].try_into().unwrap());

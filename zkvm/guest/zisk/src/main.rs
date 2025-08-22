@@ -3,6 +3,7 @@ ziskos::entrypoint!(main);
 
 use anyhow::Result;
 use pubkey_cache::PubkeyCache;
+use serde::{Deserialize, Serialize};
 use ssz::{SszHash as _, SszRead as _};
 use transition_functions::combined::untrusted_state_transition as state_transition;
 use types::{
@@ -13,69 +14,46 @@ use types::{
 };
 use ziskos::{read_input, set_output};
 
-fn read_slice<'a>(cursor: &mut usize, input: &'a [u8], len: usize) -> Result<&'a [u8]> {
-    let end = *cursor + len;
-    let slice = input
-        .get(*cursor..end)
-        .ok_or_else(|| anyhow::anyhow!("Input too short for slice"))?;
-    *cursor = end;
-    Ok(slice)
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ZkvmInput {
+    pub state_ssz: Vec<u8>,
+    pub block_ssz: Vec<u8>,
+    pub cache_ssz: Vec<u8>,
+    pub phase: u8,
 }
 
+/// Deserializes the input data and parses the SSZ components
 fn read_block_and_state<P: Preset>(
     config: &Config,
     input: &[u8],
 ) -> Result<(SignedBeaconBlock<P>, BeaconState<P>, PubkeyCache)> {
-    let mut cursor = 0;
-
-    let read_u32_len = |cursor: &mut usize, input: &[u8]| -> Result<usize> {
-        let len = u32::from_le_bytes(
-            input
-                .get(*cursor..*cursor + 4)
-                .ok_or_else(|| anyhow::anyhow!("Input too short for length"))?
-                .try_into()?,
-        ) as usize;
-        *cursor += 4;
-        Ok(len)
-    };
-
-    let state_ssz_len = read_u32_len(&mut cursor, input)?;
-    let block_ssz_len = read_u32_len(&mut cursor, input)?;
-    let cache_ssz_len = read_u32_len(&mut cursor, input)?;
-    let phase_bytes_len = read_u32_len(&mut cursor, input)?;
-
-    let state_ssz = read_slice(&mut cursor, input, state_ssz_len)?;
-    let block_ssz = read_slice(&mut cursor, input, block_ssz_len)?;
-    let cache_ssz = read_slice(&mut cursor, input, cache_ssz_len)?;
-    let phase_bytes = read_slice(&mut cursor, input, phase_bytes_len)?;
-
-    println!("Phase bytes: {:?}", phase_bytes);
+    // Deserialize the input using bincode
+    let zkvm_input: ZkvmInput = bincode::deserialize(input).unwrap();
+    println!("Phase: {}", zkvm_input.phase);
+    
+    // Convert phase byte to Phase enum
     let phase = enum_iterator::all::<Phase>()
         .zip(0_u8..)
-        .find(|(_, index)| phase_bytes.get(0) == Some(&index))
+        .find(|(_, index)| *index == zkvm_input.phase)
         .map(|(phase, _)| phase);
-    println!("Phase: {:?}", phase);
+    println!("Phase enum: {:?}", phase);
 
+    // Parse the block from SSZ
     let block = match phase {
-        Some(phase) => SignedBeaconBlock::<P>::from_ssz_at_phase(phase, block_ssz)?,
-        None => SignedBeaconBlock::<P>::from_ssz(config, block_ssz)?,
+        Some(phase) => SignedBeaconBlock::<P>::from_ssz_at_phase(phase, &zkvm_input.block_ssz)?,
+        None => SignedBeaconBlock::<P>::from_ssz(config, &zkvm_input.block_ssz)?,
     };
     println!("Block loaded");
 
+    // Parse the state from SSZ
     let state = match phase {
-        Some(phase) => BeaconState::<P>::from_ssz_at_phase(phase, state_ssz)?,
-        None => BeaconState::<P>::from_ssz(config, state_ssz)?,
+        Some(phase) => BeaconState::<P>::from_ssz_at_phase(phase, &zkvm_input.state_ssz)?,
+        None => BeaconState::<P>::from_ssz(config, &zkvm_input.state_ssz)?,
     };
     println!("State loaded");
 
-    // let cache = if cache_ssz.is_empty() {
-    //     // Buildin a dummy cache
-    //     // The real cache isn't strictly needed for the state transition function itself.
-    //     PubkeyCache::default()
-    // } else {
-    //     PubkeyCache::from_ssz(config, cache_ssz)?
-    // };
-    let cache = PubkeyCache::from_ssz(config, &cache_ssz)?;
+    // Parse the cache from SSZ
+    let cache = PubkeyCache::from_ssz(config, &zkvm_input.cache_ssz)?;
     println!("Cache loaded");
 
     Ok((block, state, cache))
@@ -92,11 +70,11 @@ fn main() {
 
     println!("Reading block and state");
     let (block, mut state, cache) =
-        read_block_and_state::<Mainnet>(&config, &input).expect("Failed to read input");
+        read_block_and_state::<Mainnet>(&config, &input).unwrap();
     println!("Block and state read");
 
     println!("Performing state transition");
-    state_transition(&config, &cache, &mut state, &block).expect("State transition failed");
+    state_transition(&config, &cache, &mut state, &block).unwrap();
     println!("State transition performed");
 
     println!("Calculating root");

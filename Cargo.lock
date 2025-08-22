@@ -10709,10 +10709,12 @@ name = "zkvm_guest_zisk"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "bincode",
  "bls",
  "byteorder",
  "enum-iterator",
  "pubkey_cache",
+ "serde",
  "snap",
  "ssz",
  "transition_functions",

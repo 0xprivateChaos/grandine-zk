@@ -67,7 +67,7 @@ members = [
     'validator_statistics',
     'zkvm/guest/risc0',
     'zkvm/guest/zisk',
-    # 'zkvm/host',
+    'zkvm/host',
 ]
 # Feature resolver version 2 is the default starting with Rust 2021, but that does not apply in
 # virtual workspaces. Starting with Rust 1.72.0, Cargo warns if a Rust 2021 virtual workspace does
@@ -101,39 +101,39 @@ unsafe_code = 'forbid'
 # See the output of `rustc --warn help` for a full list of lints available in the current version.
 # They are documented at <https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html>.
 absolute_paths_not_starting_with_crate = 'warn'
-anonymous_parameters                   = 'warn'
-deprecated_in_future                   = 'warn'
-deprecated_safe                        = 'warn'
-keyword_idents_2018                    = 'warn'
-let_underscore_drop                    = 'warn'
-macro_use_extern_crate                 = 'warn'
-meta_variable_misuse                   = 'warn'
-missing_unsafe_on_extern               = 'warn'
-non_ascii_idents                       = 'warn'
-non_local_definitions                  = 'warn'
-redundant_lifetimes                    = 'warn'
-trivial_casts                          = 'warn'
-trivial_numeric_casts                  = 'warn'
-unit_bindings                          = 'warn'
-unused_crate_dependencies              = 'warn'
-unused_extern_crates                   = 'warn'
-unused_import_braces                   = 'warn'
-unused_lifetimes                       = 'warn'
-unused_macro_rules                     = 'warn'
-unused_qualifications                  = 'warn'
+anonymous_parameters = 'warn'
+deprecated_in_future = 'warn'
+deprecated_safe = 'warn'
+keyword_idents_2018 = 'warn'
+let_underscore_drop = 'warn'
+macro_use_extern_crate = 'warn'
+meta_variable_misuse = 'warn'
+missing_unsafe_on_extern = 'warn'
+non_ascii_idents = 'warn'
+non_local_definitions = 'warn'
+redundant_lifetimes = 'warn'
+trivial_casts = 'warn'
+trivial_numeric_casts = 'warn'
+unit_bindings = 'warn'
+unused_crate_dependencies = 'warn'
+unused_extern_crates = 'warn'
+unused_import_braces = 'warn'
+unused_lifetimes = 'warn'
+unused_macro_rules = 'warn'
+unused_qualifications = 'warn'
 
 # These are almost never helpful and require boilerplate.
-unstable_name_collisions               = 'allow'
+unstable_name_collisions = 'allow'
 
 [workspace.lints.clippy]
 # Additional Clippy lint groups.
-nursery  = 'warn'
+nursery = 'warn'
 pedantic = 'warn'
 
 # A subset of the `clippy::cargo` group.
-negative_feature_names  = 'warn'
+negative_feature_names = 'warn'
 redundant_feature_names = 'warn'
-wildcard_dependencies   = 'warn'
+wildcard_dependencies = 'warn'
 
 # A subset of the `clippy::restriction` group.
 # Some notable lints from it that we do not enable:
@@ -183,62 +183,62 @@ wildcard_dependencies   = 'warn'
 #
 # - `clippy::unimplemented`
 #   It's useful to leave some trait methods unimplemented.
-alloc_instead_of_core             = 'warn'
-allow_attributes                  = 'warn'
-assertions_on_result_states       = 'warn'
-cfg_not_test                      = 'warn'
-clone_on_ref_ptr                  = 'warn'
-dbg_macro                         = 'warn'
-decimal_literal_representation    = 'warn'
-empty_drop                        = 'warn'
+alloc_instead_of_core = 'warn'
+allow_attributes = 'warn'
+assertions_on_result_states = 'warn'
+cfg_not_test = 'warn'
+clone_on_ref_ptr = 'warn'
+dbg_macro = 'warn'
+decimal_literal_representation = 'warn'
+empty_drop = 'warn'
 empty_enum_variants_with_brackets = 'warn'
-empty_structs_with_brackets       = 'warn'
-filetype_is_file                  = 'warn'
-float_arithmetic                  = 'warn'
-float_cmp_const                   = 'warn'
-format_push_string                = 'warn'
-get_unwrap                        = 'warn'
-host_endian_bytes                 = 'warn'
-if_then_some_else_none            = 'warn'
-lossy_float_literal               = 'warn'
-missing_asserts_for_indexing      = 'warn'
-mixed_read_write_in_expression    = 'warn'
-multiple_inherent_impl            = 'warn'
-mutex_atomic                      = 'warn'
-needless_raw_strings              = 'warn'
-partial_pub_fields                = 'warn'
-print_stderr                      = 'warn'
-print_stdout                      = 'warn'
-pub_without_shorthand             = 'warn'
-rc_buffer                         = 'warn'
-rc_mutex                          = 'warn'
-redundant_type_annotations        = 'warn'
-rest_pat_in_fully_bound_structs   = 'warn'
-same_name_method                  = 'warn'
-semicolon_inside_block            = 'warn'
-std_instead_of_core               = 'warn'
-str_to_string                     = 'warn'
-string_add                        = 'warn'
-string_lit_chars_any              = 'warn'
-string_slice                      = 'warn'
-string_to_string                  = 'warn'
-todo                              = 'warn'
+empty_structs_with_brackets = 'warn'
+filetype_is_file = 'warn'
+float_arithmetic = 'warn'
+float_cmp_const = 'warn'
+format_push_string = 'warn'
+get_unwrap = 'warn'
+host_endian_bytes = 'warn'
+if_then_some_else_none = 'warn'
+lossy_float_literal = 'warn'
+missing_asserts_for_indexing = 'warn'
+mixed_read_write_in_expression = 'warn'
+multiple_inherent_impl = 'warn'
+mutex_atomic = 'warn'
+needless_raw_strings = 'warn'
+partial_pub_fields = 'warn'
+print_stderr = 'warn'
+print_stdout = 'warn'
+pub_without_shorthand = 'warn'
+rc_buffer = 'warn'
+rc_mutex = 'warn'
+redundant_type_annotations = 'warn'
+rest_pat_in_fully_bound_structs = 'warn'
+same_name_method = 'warn'
+semicolon_inside_block = 'warn'
+std_instead_of_core = 'warn'
+str_to_string = 'warn'
+string_add = 'warn'
+string_lit_chars_any = 'warn'
+string_slice = 'warn'
+string_to_string = 'warn'
+todo = 'warn'
 # Enable `clippy::undocumented_unsafe_blocks` in case we ever change our stance on unsafe code.
-undocumented_unsafe_blocks        = 'warn'
-unnecessary_self_imports          = 'warn'
-unwrap_used                       = 'warn'
-verbose_file_reads                = 'warn'
+undocumented_unsafe_blocks = 'warn'
+unnecessary_self_imports = 'warn'
+unwrap_used = 'warn'
+verbose_file_reads = 'warn'
 
 # These are almost never helpful.
 assertions_on_constants = { level = 'allow', priority = 1 }
-map_unwrap_or           = { level = 'allow', priority = 1 }
-option_if_let_else      = { level = 'allow', priority = 1 }
-single_match_else       = { level = 'allow', priority = 1 }
-struct_field_names      = { level = 'allow', priority = 1 }
+map_unwrap_or = { level = 'allow', priority = 1 }
+option_if_let_else = { level = 'allow', priority = 1 }
+single_match_else = { level = 'allow', priority = 1 }
+struct_field_names = { level = 'allow', priority = 1 }
 
 # These are almost never helpful and require boilerplate.
 into_iter_without_iter = { level = 'allow', priority = 1 }
-len_without_is_empty   = { level = 'allow', priority = 1 }
+len_without_is_empty = { level = 'allow', priority = 1 }
 
 # `derivative::Derivative` and `fixed_hash::construct_fixed_hash!` generate code that triggers these.
 # It is not just a bug in the macros.
@@ -249,8 +249,8 @@ len_without_is_empty   = { level = 'allow', priority = 1 }
 # `derivative` has open issues for 2 of the lints:
 # - <https://github.com/mcarton/rust-derivative/issues/112>
 # - <https://github.com/mcarton/rust-derivative/issues/115>
-expl_impl_clone_on_copy        = { level = 'allow', priority = 1 }
-non_canonical_clone_impl       = { level = 'allow', priority = 1 }
+expl_impl_clone_on_copy = { level = 'allow', priority = 1 }
+non_canonical_clone_impl = { level = 'allow', priority = 1 }
 non_canonical_partial_ord_impl = { level = 'allow', priority = 1 }
 
 # `clippy::implicit_hasher` has next to no benefit and sometimes requires nonlocal changes to code.
@@ -301,7 +301,7 @@ bincode = '1'
 bit_field = '0.10'
 bitvec = '1'
 # bls12_381 = { git = 'https://github.com/ArtiomTr/universal-precompiles.git', tag = 'bls12_381-6bb9695-up.0' }
-bls12_381 = { git = "https://github.com/0xprivateChaos/zisk-patch-bls12_381.git", branch = "zisk-patch/v0.8.0" }
+bls12_381 = { git = "https://github.com/0xprivateChaos/zisk-patch-bls12_381.git", branch = "features/sp1-libv5.0.0" }
 blst = { version = '0.3', features = ['portable'] }
 bonsai-sdk = '1.4.0'
 borsh = "1.5.7"
@@ -370,11 +370,28 @@ impl-serde = '0.5'
 integer-sqrt = '0.1'
 instant = '0.1'
 itertools = '0.14'
-jwt-simple = { version = '0.12', default-features = false, features = ['pure-rust'] }
+jwt-simple = { version = '0.12', default-features = false, features = [
+    'pure-rust',
+] }
 kzg = { git = 'https://github.com/grandinetech/rust-kzg.git' }
 lazy_static = '1'
 libmdbx = { git = 'https://github.com/paradigmxyz/reth.git', package = 'reth-libmdbx', rev = '6f8e7258f4733279080e4bd8345ce50538a40d6e' }
-libp2p = { version = '0.55', default-features = false, features = ['metrics', 'dns', 'ecdsa', 'identify', 'macros', 'noise', 'plaintext', 'secp256k1', 'serde', 'tcp', 'tokio', 'yamux', 'quic', 'upnp'] }
+libp2p = { version = '0.55', default-features = false, features = [
+    'metrics',
+    'dns',
+    'ecdsa',
+    'identify',
+    'macros',
+    'noise',
+    'plaintext',
+    'secp256k1',
+    'serde',
+    'tcp',
+    'tokio',
+    'yamux',
+    'quic',
+    'upnp',
+] }
 libp2p-mplex = '0.43'
 libp2p-identity = { version = '0.2.10', features = ['peerid'] }
 local-ip-address = '0.6'
@@ -410,12 +427,15 @@ rand = '0.8'
 rand_chacha = '0.3.1'
 rayon = '1'
 rc-box = '1'
-refinery = { version = '0.8',  features = ['rusqlite'] }
+refinery = { version = '0.8', features = ['rusqlite'] }
 regex = '1'
 replace_with = '0.1'
 reqwest = { version = '0.12', features = ['json', 'native-tls-vendored'] }
 risc0-build = { version = '2.3.1', features = ['unstable'] }
-risc0-zkvm = { version = '2.3.1', features = ['unstable', 'heap-embedded-alloc'] }
+risc0-zkvm = { version = '2.3.1', features = [
+    'unstable',
+    'heap-embedded-alloc',
+] }
 rusqlite = { version = '0.33', features = ['bundled'] }
 rust-kzg-arkworks5 = { git = 'https://github.com/grandinetech/rust-kzg.git' }
 rust-kzg-blst = { git = 'https://github.com/grandinetech/rust-kzg.git' }
@@ -435,7 +455,9 @@ serde_with = '3'
 serde_yaml = '0.9'
 # The `asm` feature in `sha2` doesn't do anything on recent `x86_64` CPUs
 # because `sha2` defaults to using CPU intrinsics.
-sha2 = { git = 'https://github.com/ArtiomTr/universal-precompiles.git', tag = 'sha2-v0.10.9-up.0', features = ['compress'] }
+sha2 = { git = 'https://github.com/ArtiomTr/universal-precompiles.git', tag = 'sha2-v0.10.9-up.0', features = [
+    'compress',
+] }
 slog = { version = '2', features = ['max_level_trace'] }
 slog-async = '2'
 slog-stdlog = '4'
@@ -456,9 +478,19 @@ test-generator = '0.3'
 testing_logger = '0.1'
 thiserror = '2'
 tikv-jemalloc-ctl = { version = '0.6', features = ['stats'] }
-tikv-jemallocator = { version = '0.6', features = ['stats', 'background_threads_runtime_support'] }
+tikv-jemallocator = { version = '0.6', features = [
+    'stats',
+    'background_threads_runtime_support',
+] }
 tiny-keccak = '2'
-tokio = { version = '1', features = ['fs', 'macros', 'rt-multi-thread', 'signal', 'sync', 'time'] }
+tokio = { version = '1', features = [
+    'fs',
+    'macros',
+    'rt-multi-thread',
+    'signal',
+    'sync',
+    'time',
+] }
 tokio-io-timeout = '1'
 tokio-stream = { version = '0.1', features = ['sync'] }
 tokio-util = { version = '0.7', features = ['codec', 'compat', 'time'] }
@@ -613,4 +645,4 @@ sha2 = { git = "https://github.com/0xPolygonHermez/zisk-patch-hashes.git", branc
 
 [patch.'https://github.com/zkcrypto/bls12_381.git']
 # bls12_381 = { git = 'https://github.com/ArtiomTr/universal-precompiles.git', tag = 'bls12_381-6bb9695-up.0' }
-bls12_381 = { git = "https://github.com/0xprivateChaos/zisk-patch-bls12_381.git", branch = "zisk-patch/v0.8.0" }
+bls12_381 = { git = "https://github.com/0xprivateChaos/zisk-patch-bls12_381.git", branch = "features/sp1-libv5.0.0" }

@@ -14,13 +14,13 @@ use types::{
 };
 use ziskos::{read_input, set_output};
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ZkvmInput {
-    pub state_ssz: Vec<u8>,
-    pub block_ssz: Vec<u8>,
-    pub cache_ssz: Vec<u8>,
-    pub phase: u8,
-}
+// #[derive(Serialize, Deserialize, Debug)]
+// pub struct ZkvmInput {
+//     pub state_ssz: Vec<u8>,
+//     pub block_ssz: Vec<u8>,
+//     pub cache_ssz: Vec<u8>,
+//     pub phase: u8,
+// }
 
 /// Deserializes the input data and parses the SSZ components
 fn read_block_and_state<P: Preset>(
@@ -28,32 +28,32 @@ fn read_block_and_state<P: Preset>(
     input: &[u8],
 ) -> Result<(SignedBeaconBlock<P>, BeaconState<P>, PubkeyCache)> {
     // Deserialize the input using bincode
-    let zkvm_input: ZkvmInput = bincode::deserialize(input).unwrap();
-    println!("Phase: {}", zkvm_input.phase);
+    let (state_ssz, block_ssz, cache_ssz, phase_bytes): (Vec<u8>, Vec<u8>, Vec<u8>, Vec<u8>) = bincode::deserialize(input).unwrap();
+    println!("Phase: {:?}", phase_bytes);
     
     // Convert phase byte to Phase enum
     let phase = enum_iterator::all::<Phase>()
         .zip(0_u8..)
-        .find(|(_, index)| *index == zkvm_input.phase)
+        .find(|(_, index)| *index == phase_bytes[0])
         .map(|(phase, _)| phase);
     println!("Phase enum: {:?}", phase);
 
     // Parse the block from SSZ
     let block = match phase {
-        Some(phase) => SignedBeaconBlock::<P>::from_ssz_at_phase(phase, &zkvm_input.block_ssz)?,
-        None => SignedBeaconBlock::<P>::from_ssz(config, &zkvm_input.block_ssz)?,
+        Some(phase) => SignedBeaconBlock::<P>::from_ssz_at_phase(phase, &block_ssz)?,
+        None => SignedBeaconBlock::<P>::from_ssz(config, &block_ssz)?,
     };
     println!("Block loaded");
 
     // Parse the state from SSZ
     let state = match phase {
-        Some(phase) => BeaconState::<P>::from_ssz_at_phase(phase, &zkvm_input.state_ssz)?,
-        None => BeaconState::<P>::from_ssz(config, &zkvm_input.state_ssz)?,
+        Some(phase) => BeaconState::<P>::from_ssz_at_phase(phase, &state_ssz)?,
+        None => BeaconState::<P>::from_ssz(config, &state_ssz)?,
     };
     println!("State loaded");
 
     // Parse the cache from SSZ
-    let cache = PubkeyCache::from_ssz(config, &zkvm_input.cache_ssz)?;
+    let cache = PubkeyCache::from_ssz(config, &cache_ssz)?;
     println!("Cache loaded");
 
     Ok((block, state, cache))

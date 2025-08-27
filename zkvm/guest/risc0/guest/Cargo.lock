@@ -494,9 +494,10 @@ dependencies = [
 
 [[package]]
 name = "bls12_381"
-version = "0.8.0-sp1-5.0.0"
-source = "git+https://github.com/0xprivateChaos/zisk-patch-bls12_381.git?branch=features%2Fsp1-libv5.0.0#ae9a3ed9d999004924c3d37b3744ada49d091dad"
+version = "0.8.0"
+source = "git+https://github.com/ArtiomTr/universal-precompiles.git?tag=bls12_381-6bb9695-up.0#6f2b1f2a5f76c3bc843d371c1c2655077ce4d0e5"
 dependencies = [
+ "bytemuck",
  "cfg-if",
  "digest",
  "ff",
@@ -504,6 +505,7 @@ dependencies = [
  "hex",
  "pairing",
  "rand_core",
+ "risc0-bigint2",
  "sp1-lib",
  "subtle",
 ]
@@ -2630,6 +2632,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "risc0-bigint2"
+version = "1.4.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a8e9769ada710c19a4593c46db36edd93de57c70f56a1dd2d09a2b5f618c8d59"
+dependencies = [
+ "include_bytes_aligned",
+ "stability",
+]
+
+[[package]]
 name = "risc0-binfmt"
 version = "2.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4109,8 +4121,3 @@ dependencies = [
  "quote",
  "syn 2.0.101",
 ]
-
-[[patch.unused]]
-name = "bls12_381"
-version = "0.8.0"
-source = "git+https://github.com/ArtiomTr/universal-precompiles.git?tag=bls12_381-6bb9695-up.0#6f2b1f2a5f76c3bc843d371c1c2655077ce4d0e5"

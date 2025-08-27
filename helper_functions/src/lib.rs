@@ -1,3 +1,6 @@
+#![cfg_attr(target_os = "zkvm", feature(unsigned_is_multiple_of))]
+#![allow(clippy::suspicious_operation_groupings)]
+
 pub mod accessors;
 pub mod altair;
 pub mod bellatrix;

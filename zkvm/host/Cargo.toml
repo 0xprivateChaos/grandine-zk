@@ -9,6 +9,7 @@ workspace = true
 [dependencies]
 anyhow = { workspace = true }
 bincode = { workspace = true }
+tempfile = "3.8"
 bls = { workspace = true, features = ['zkcrypto'] }
 borsh = { workspace = true, optional = true }
 clap = { workspace = true, features = ['derive'] }

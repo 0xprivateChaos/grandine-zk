@@ -1,0 +1,28 @@
+[package]
+name = "zkvm_guest_zisk"
+version = "0.1.0"
+edition = "2021"
+default-run = "zkvm_guest_zisk"
+authors = ["Grandine <info@grandine.io>"]
+
+[dependencies]
+anyhow = "1.0.86"
+bincode = "1.3.3"
+bls = { path = '../../../bls', features = [
+    'zkcrypto',
+], default-features = false }
+byteorder = "1.5.0"
+enum-iterator = "2"
+pubkey_cache = { path = "../../../pubkey_cache" }
+snap = "1.1.1"
+ssz = { path = "../../../ssz" }
+transition_functions = { path = "../../../transition_functions" }
+types = { path = "../../../types" }
+ziskos = { git = "https://github.com/0xPolygonHermez/zisk.git" }
+
+[build-dependencies]
+snap = "1.1.1"
+bincode = "1.3.3"
+
+[patch.'https://github.com/zkcrypto/bls12_381.git']
+bls12_381 = { git = "https://github.com/0xprivateChaos/zisk-patch-bls12_381.git", branch = "features/sp1-libv5.0.0" }

@@ -189,6 +189,7 @@ fn main() -> Result<()> {
 
         (state.hash_tree_root(), cache.to_ssz().unwrap())
     };
+    println!("expected_root: {:?}", expected_root);
 
     let phase_byte = enum_iterator::all::<Phase>()
         .zip(0_u8..)
@@ -200,8 +201,7 @@ fn main() -> Result<()> {
         Command::Execute => {
             let started_at = Instant::now();
             let vm = Vm::new()?;
-            let (output_bytes, report) =
-                vm.execute(state_ssz, block_ssz, cache, vec![phase_byte])?;
+            let (output_bytes, report) = vm.execute(state_ssz, block_ssz, cache, vec![phase_byte])?;
             let state_root = H256(output_bytes.try_into().unwrap());
 
             println!("elapsed: {:?}", started_at.elapsed());
